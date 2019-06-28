@@ -1,0 +1,102 @@
+erp 测试库地址
+192.168.188.19
+sa/sa
+
+
+-- 外协收回
+select * from pm_rcvline e innner join pm_receivement t
+on t.id = e.receivement
+
+-- 机加工杂收
+select * from  InvDoc_MiscRcvTransL
+
+-- 半成品完工入库
+select * from mo_completerpt 
+
+标准件 和外协在一起
+
+
+---
+qryfsorder
+
+
+
+
+select top 10 t.id ,t.createdon,t.status,t.createdon  from pm_rcvline t  where t.Receivement ='1001904190018501'  order by t.createdon desc  ;
+
+select top 10 t.id ,t.createdon,t.status,t.createdon ,t.Receivement from pm_rcvline t  where t.status='3' order by t.createdon desc  ;
+
+select top 10 t.Status,t.ID ,t.DocNo from PM_Receivement  t where t.id = '1001904101182411 ' order by createdon desc  ; 
+ 
+1001904101182411
+
+select distinct t.docNo,r.status from pm_rcvline r left join 
+pm_receivement t on t.id = r.receivement where t.docNo='R19040831';
+
+
+pm_receivement
+ 
+ -- P19040718
+ 
+ -- PM_Receivement[收货单]
+ select top 10 t.Status,t.ID  from PM_Receivement  t where t.docno = 'R19040831 ' order by createdon desc  ;
+ 
+ -- PM_RcvLine[收货行]
+ select top 10 t.createdon,t.status,t.createdon,t.ReturnSupplier_Code,t.ReturnSupplier_Supplier   from pm_rcvline t  where t.Receivement ='1001904190018501'  order by t.createdon desc  ;
+ 
+ 
+ -- P19040718
+ 
+ --  PM_RcvLineLocation[收货行库位子表]
+ select top 10 t.RcvLine,t.*    from PM_RcvLineLocation t where t.RcvLine ='1001904190018501' order by createdon desc  ;
+ 
+ 
+ 
+ select top 10 t.Status,t.ID  from PM_Receivement  t where t.docno = 'R19040844' order by createdon desc  ;
+ 
+ 
+ 
+ select top 10 t.Status,t.ID,t.createdon   from PM_Receivement  t   order by createdon desc  ;
+	
+ 
+ 
+ select top 10 * from  InvDoc_MiscRcvTransL t order by  createdon desc  ;
+
+-- 半成品完工入库
+select top 10 * from mo_completerpt  t order by  createdon desc  ;
+
+
+select top 10 *  from PM_RcvLineLocation ;
+
+
+
+select * from pm_rcvline t ;
+
+-- R19040957
+
+-- ownorg
+-- 1001804193952538
+ 
+ 
+ 
+ select top 10 * from PM_Receivement  t order by createdon desc  ;
+ 
+ 
+ select top 10 * from  InvDoc_MiscRcvTransL t order by  createdon desc  ;
+
+-- 半成品完工入库
+select top 10 * from mo_completerpt  t order by  createdon desc  ;
+
+
+select top 10 *  from PM_RcvLineLocation ;
+
+
+
+ 
+
+
+R19040987
+
+R19040831
+
+R19040844

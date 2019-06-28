@@ -1,0 +1,70 @@
+select * from temp_pm_receivement;
+
+drop table temp_pm_receivement ;
+
+delete from temp_pm_receivement;
+
+create table  temp_pm_receivement 
+
+
+Create table temp_pm_receivement ( 
+	id varchar(50) default('') not null,
+	status  varchar(50) default ('') not null 
+)
+
+
+
+
+insert into temp_pm_receivement
+select 
+2 
+,(Case [status] when 3 then '3' 
+when 5 then '5'  
+end) 
+from pm_rcvline t  where t.Receivement ='1001904101182411' ;
+
+-- 1001904210011525
+-- 1001904200018788
+
+select top 10 * from pm_rcvline t  where t.Receivement ='1001904101182411' 
+
+select top 10 t.*  from pm_receivement t ;
+select top 10 t.id ,t.status,t.AAIStatus  from pm_receivement t ;
+
+update pm_receivement set sysversion =9 where id ='1001904210011525';
+update pm_receivement set status  =5 where id ='1001904210011525';
+select * from temp_pm_receivement;
+
+select * from temp_pm_receivement;
+
+-----------------------------------------------------------------------------------
+-- 供应商 昆山润朴森电子有限公司
+
+select top 10 t.ShortName,t.ID   from CBO_Supplier t where  t.ShortName like '%润朴%';
+select top 10 t.ShortName,t.*    from CBO_Supplier t where  t.id ='1001804194247696';
+
+select top 10 *  from CBO_Supplier_Trl t where t.id ='1001804194247696';
+-- 1001804194247696
+
+select top 10 t.*  from pm_rcvline t  where t.Receivement ='1001904190018501'  order by t.createdon desc  ;
+
+select top 10 t.ConfirmSupplier_Supplier,t.ArriveQtySU,t.RcvQtySU ,t.PriceUOM,t.PriceBaseUOM   from pm_rcvline t  where t.Receivement ='1001904190008961' ;
+
+select top 10 * from Base_UOM t  where id ='1001805200000192';
+
+
+ -- PM_Receivement[收货单]
+ select top 10 t.Status,t.ID,t.*  from PM_Receivement  t where t.docno = 'R19040831 ' order by createdon desc  ;
+ -- 1001804194247696
+ -- S-00219
+
+--- ConfirmSupplier_ConfirmSupplier
+
+-----------------------------------------------------------------------------------------------------------
+
+-- 料号
+iteminfo_itemid   itemInfo_itemcode  iteminfo_itemName;
+-- 1001903280009721 RGAH-00130
+-- 母阶
+select top 10 *  from dbo.CBO_ItemMaster t ;
+select top 10 *  from dbo.CBO_ItemMaster t where t.id ='1001903280009721'; 

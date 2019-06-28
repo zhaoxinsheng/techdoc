@@ -1,0 +1,93 @@
+erp 测试库地址
+192.168.188.19
+sa/sa
+
+
+-- 外协收回
+select * from pm_rcvline e innner join pm_receivement t
+on t.id = e.receivement
+
+-- 机加工杂收
+select * from  InvDoc_MiscRcvTransL
+
+-- 半成品完工入库
+select * from mo_completerpt 
+
+标准件 和外协在一起
+
+
+---
+qryfsorder
+
+
+
+
+select top 10 t.id ,t.createdon,t.status,t.createdon  from pm_rcvline t  where t.Receivement ='1001904190008961'  order by t.createdon desc  ;
+ 
+ -- P19040718
+ 
+ -- PM_Receivement[收货单]
+ select top 10 t.Status,t.ID  from PM_Receivement  t where t.docno = 'R19040831' order by createdon desc  ;
+ 
+ -- PM_RcvLine[收货行]
+ select top 10 t.createdon,t.status,t.createdon  from pm_rcvline t  where t.Receivement ='1001904190008961'  order by t.createdon desc  ;
+ 
+ -- P19040718
+ 
+ --  PM_RcvLineLocation[收货行库位子表]
+ select top 10 *  from PM_RcvLineLocation t where t.RcvLine ='1001904190008965' order by createdon desc  ;
+ 
+ 
+ 
+ select top 10 t.Status,t.ID  from PM_Receivement  t where t.docno = 'R19040831' order by createdon desc  ;
+ 
+ 
+ 
+ select top 10 t.Status,t.ID,t.createdon   from PM_Receivement  t   order by createdon desc  ;
+	
+ 
+ 
+ select top 10 * from  InvDoc_MiscRcvTransL t order by  createdon desc  ;
+
+-- 半成品完工入库
+select top 10 * from mo_completerpt  t order by  createdon desc  ;
+
+
+select top 10 *  from PM_RcvLineLocation ;
+
+
+
+select * from pm_rcvline t ;
+
+-- R19040957
+
+-- ownorg
+-- 1001804193952538
+ 
+ 
+ 
+ select top 10 * from PM_Receivement  t order by createdon desc  ;
+ 
+ 
+ select top 10 * from  InvDoc_MiscRcvTransL t order by  createdon desc  ;
+
+-- 半成品完工入库
+select top 10 * from mo_completerpt  t order by  createdon desc  ;
+
+
+select top 10 *  from PM_RcvLineLocation ;
+
+
+昆山市玉山镇恒盛路1299号2号房
+
+
+R19040987
+
+R19040831
+
+R19040844
+
+
+------------------------------------------------------------------
+R19040844
+
