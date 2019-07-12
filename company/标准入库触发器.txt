@@ -1,0 +1,207 @@
+
+-- ----------------------------
+-- Triggers structure for table PM_RcvLine
+-- ----------------------------
+if(OBJECT_ID('tri_pm_rcvline') is not null)   
+  drop trigger tri_pm_rcvline   
+  go
+ 
+CREATE TRIGGER [tri_pm_rcvline]
+ON [PM_RcvLine] 
+FOR UPDATE
+AS 
+-- 物料ID
+declare @itemId                  bigint 
+-- 物料编号
+declare @itemCode                varchar(32) 
+-- 物料名称
+declare @itemName                varchar(100) 
+-- 供应商ID
+declare @supplierId              bigint 
+-- 供应商名称-全称
+declare @supplierName            varchar (100)
+-- 供应商简称
+declare @supplierShortName            varchar(100) 
+-- 供应商编号
+declare @supplierCode            varchar(32)
+-- 母阶ID
+declare @parentItemId            bigint 
+-- 母阶编码
+declare @parentItemCode          varchar(32) 
+-- 母阶名称
+declare @parentItemName          varchar(100) 
+-- 数量
+declare @itemNum                 decimal(30,9) 
+-- 单位ID
+declare @itemUnitId              bigint 
+-- 单位编号
+declare @itemUnitCode            varchar(32) 
+-- 单位名称
+declare @itemUnitName            varchar(100) 
+
+-- 收货部门
+declare @recvDeptId              bigint 
+-- 收货部门名称
+declare @recvDeptName            varchar(100) 
+-- 收货部门编号
+declare @recvDeptCode            varchar(100) 
+
+-- 仓库管理员ID
+declare @whManId                 bigint 
+-- 仓库管理员名称
+declare @whManName               varchar(100) 
+-- 仓库管理员编码
+declare @whManCode               varchar(100) 
+
+-- 料箱ID
+declare @boxId                   bigint 
+-- 料箱编码
+declare @boxCode                 varchar(32) 
+-- 库位
+declare @positionId              bigint 
+-- 库位编号
+declare @positionCode            varchar(32)  
+-- 插入系统时间
+declare @insertTime              date 
+-- 更新时间
+declare @updateTime              date 
+-- 数据来源 ERP 1 
+declare @dataSource              int
+-- 母阶2ID
+declare @parentItemCode2         varchar(32)  
+-- 母阶2编码
+declare @parentItemId2           bigint 
+-- 母阶2名称
+declare @parentItemName2         varchar(100)  
+-- 母阶3Id
+declare @parentItemId3           bigint 
+-- 母阶3编码
+declare @parentItemCode3         varchar(32)  
+-- 母阶3名称
+declare @parenItemName3          varchar(100)  
+-- 状态 1 正常 2 不正常
+declare @status                  bigint 
+
+declare @NEW_STATUS              bigint
+
+declare @OLD_STATUS              bigint
+
+declare @receiveMentId           bigint
+ 
+begin 
+   if(UPDATE(status) )
+ 
+			select @NEW_STATUS = status from inserted 
+			
+			if (@NEW_STATUS = 4 or @NEW_STATUS = 5) 
+			begin 
+				-- 开始获取数据插入到 临时表
+				select @itemNum = RcvQtySU,@itemUnitId=PriceUOM,@recvDeptId = RcvDept,@whManId = WhMan,@status = 1 from inserted
+				select @itemId = ItemInfo_ItemID from inserted
+				select @itemCode = ItemInfo_ItemCode from inserted 
+					-- 料号名称
+			  select @itemName= CombineName from   CBO_ItemMaster_Trl   where ID = @itemId
+				-- 供应商
+				select @receiveMentId = Receivement from inserted
+				select @supplierId = Supplier_Supplier from PM_Receivement where id = @receiveMentId
+				select @supplierName = name  from cbo_supplier_trl t where t.id =@supplierId
+				select @supplierShortName = ShortName,@supplierCode = code from cbo_supplier t where t.id =@supplierId
+				
+				-- 计价单位 编码
+			select @itemUnitCode = code,@itemUnitName = shortName from Base_UOM t  where id = @itemUnitId
+			
+			-- 收货单位		
+			select @recvDeptCode = code from CBO_Department t where t.id = @recvDeptId 
+			select @recvDeptName = name  from CBO_Department_trl t where t.id = @recvDeptId 
+			
+			-- 仓库管理员
+			select @whManName = trl.name ,@whManCode = t.code  from CBO_Operators t ,CBO_Operators_Trl trl where t.id = trl.id and t.id = @whManId
+			
+			-- 母阶
+			select @parentItemId = t.id  from CBO_BOMMaster t where t.ItemMaster = @itemId;
+			select @parentItemCode  = cit.code ,@parentItemName  = t.namecombinename from CBO_ItemMaster_Trl t,CBO_ItemMaster cit  where t.id = cit.id and t.id = @parentItemId  
+			
+ 
+begin 				
+				INSERT INTO wms_storage_record (
+																					item_id,
+																					item_code,
+																					item_name,
+																					supplier_id,
+																					supplier_name,
+																					supplier_short_name,
+																					supplier_code,
+																					parent_item_id,
+																					parent_item_code,
+																					parent_item_name ,
+																					item_num,
+																					item_unit_id,
+																					item_unit_code,
+																					recv_dept_id,
+																					recv_dept_name,
+																					recv_dept_code,
+																					wh_man_id,
+																					wh_man_name,
+																					wh_man_code,
+																					box_id,
+																					box_code,
+																					position_id,
+																					position_code,
+																					insert_time,
+																					update_time,
+																					data_source,
+																					parent_item_id2,
+																					parent_item_code2,
+																					parent_item_name2,
+																					parent_item_id3,
+																					parent_item_code3,
+																					parent_item_name3,
+																					status 
+)
+																VALUES
+																	( 
+																		@itemId ,
+																		 @itemCode,
+																		 @itemName ,
+																		 @supplierId  ,
+																		 @supplierName ,
+																		 @supplierShortName ,
+																		 @supplierCode ,
+																		 @parentItemId,
+																		 @parentItemCode,
+																		 @parentItemName ,
+																		 @itemNum ,
+																		 @itemUnitId ,
+																		 @itemUnitCode  ,
+																		 @recvDeptId   ,
+																		 @recvDeptName ,
+																		 @recvDeptCode,
+																		 @whManId  ,
+																		 @whManName  ,
+																		 @whManCode,
+																		 @boxId ,
+																		 @boxCode ,
+																		 @positionId ,
+																		 @positionCode  ,
+																		 CONVERT(varchar,GETDATE(),120),
+																		 CONVERT(varchar,GETDATE(),120),
+																		 1,
+																		 @parentItemId2,
+																		 @parentItemCode2,
+																		 @parentItemName2,
+																		 @parentItemId3  ,
+																		 @parentItemCode3 ,
+																		 @parenItemName3 ,
+																		 @status
+																	)
+			 
+		 end
+					
+					
+				
+  end
+		
+end
+GO
+
+ 

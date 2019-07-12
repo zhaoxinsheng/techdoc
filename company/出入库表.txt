@@ -29,7 +29,7 @@ select top 10 t.id ,t.createdon,t.status,t.createdon  from pm_rcvline t  where t
  -- PM_Receivement[收货单]
  select top 10 t.Status,t.ID  from PM_Receivement  t where t.docno = 'R19040831' order by createdon desc  ;
  
- -- PM_RcvLine[收货行]
+ -- PM_RcvLine[收货行]InvDoc_MiscRcvTrans
  select top 10 t.createdon,t.status,t.createdon  from pm_rcvline t  where t.Receivement ='1001904190008961'  order by t.createdon desc  ;
  
  -- P19040718
@@ -45,15 +45,63 @@ select top 10 t.id ,t.createdon,t.status,t.createdon  from pm_rcvline t  where t
  
  select top 10 t.Status,t.ID,t.createdon   from PM_Receivement  t   order by createdon desc  ;
 	
- 
- 
+ -- 杂收 
+ InvDoc_MiscRcvTrans
  select top 10 * from  InvDoc_MiscRcvTransL t order by  createdon desc  ;
 
 -- 半成品完工入库
 select top 10 * from mo_completerpt  t order by  createdon desc  ;
 
 
+-- 材料出库
+------------------
+Issue_MaterialDeliveryDoc Issue_MaterialDeliveryDocLine
+
+-- 材料入库
+
+
 select top 10 *  from PM_RcvLineLocation ;
+
+
+ -- 材料入库 
+select top 10 * from  Issue_MaterialConfirmDoc;					
+select top 10 * from Issue_MaterialConfirmDoc;
+
+-- 材料出库
+select top 10 * from Issue_MaterialConfirmDocLine;
+select top 10 * from Issue_MaterialConfirmDoc;
+
+-----------------------------------------------------------------------------------------------
+ -- 标准入库 -- 外协采购的入库
+select top 10 * from PM_RcvLine;
+select top 10 * from  PM_Receivement ;
+ -- 标准出库 
+select top 10 * from   SM_ShipLine;
+ 
+ -- 材料入库 -- 没有使用完成的材料入库
+select top 10 * from  Issue_MaterialConfirmDoc;					
+select top 10 * from Issue_MaterialConfirmDoc;
+
+-- 材料出库
+select top 10 * from Issue_MaterialConfirmDocLine;
+select top 10 * from Issue_MaterialConfirmDoc;
+
+-- 杂收
+select top 10 * from   InvDoc_MiscRcvTrans;
+select top 10 * from  InvDoc_MiscRcvTransL;
+
+-- 杂发-- 机加工的出入库
+select top 10 * from   InvDoc_MiscShip;
+select top 10 * from   InvDoc_MiscShipL;
+
+
+-- 半成品入库 -- 
+select top 10 * from  MO_CompleteRptRcvLine;
+
+-- 半成品出库
+select top 10 * from  MO_CompleteRpt;
+
+
 
 
 

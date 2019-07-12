@@ -1,0 +1,51 @@
+declare @itemId                  varchar 
+declare @itemCode                varchar 
+declare @itemName                varchar 
+declare @supplierId              varchar 
+declare @supplierName            varchar 
+declare @supplierCode            varchar 
+declare @parentItemId            varchar 
+declare @parentItemCode          varchar 
+declare @parentItemName          varchar 
+declare @itemNum                 varchar 
+declare @itemUnitId              varchar 
+declare @itemUnitCode            varchar 
+declare @recvDeptId              varchar 
+declare @recvDeptName            varchar 
+declare @whManId                 varchar 
+declare @whManName               varchar 
+declare @boxId                   varchar 
+declare @boxCode                 varchar 
+declare @positionId              varchar 
+declare @positionCode            varchar 
+declare @insertTime              varchar 
+declare @updateTime              varchar 
+declare @dataSource              varchar 
+declare @parentItemCode2         varchar 
+declare @parentItemId2           varchar 
+declare @parentItemName2         varchar 
+declare @parentItemId3           varchar 
+declare @parentItemCode3         varchar 
+declare @parenItemName3          varchar 
+declare @status                  varchar 
+  
+  `item_unit_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '单位id',
+  `item_unit_code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '单位编码',
+  `recv_dept_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收部门',
+  `recv_dept_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接收部门名称',
+  `wh_man_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '仓库管理员id',
+  `wh_man_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '仓库管理员名称',
+  `box_id` varchar(21) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '料箱id--先做冗余处理',
+  `box_code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '料箱code',
+  `position_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '库位id--先做冗余处理',
+  `position_code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '库位code',
+  `insert_time` datetime(0) NULL DEFAULT NULL COMMENT '插入时间',
+  `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  `data_source` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据来源 1 erp 2 pad 3MES 4 APS',
+  `parent_item_id2` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '母阶料号id - 第二母阶',
+  `parent_item_code2` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '母阶料号code - 第二母阶',
+  `parent_item_name2` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '母阶料号name - 第二母阶',
+  `parent_item_id3` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '母阶料号id - 第三母阶',
+  `parent_item_code3` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '母阶料号code - 第二母阶',
+  `parent_item_name3` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '母阶料号名称 - 第二母阶',
+  `status` int(2) NULL DEFAULT NULL COMMENT '状态 1 正常 2.不正常 ',
