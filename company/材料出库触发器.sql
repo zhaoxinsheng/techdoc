@@ -137,8 +137,8 @@ begin
 			-- select @parentItemCode  = cit.code ,@parentItemName  = t.namecombinename from CBO_ItemMaster_Trl t,CBO_ItemMaster cit  where t.id = cit.id and t.id = @parentItemId  
 			
  
-begin 				
-				INSERT INTO wms_material_out (
+    begin 				
+				 INSERT INTO wms_material_out (
 																				  doc_no,
 																					item_id,
 																					item_code,

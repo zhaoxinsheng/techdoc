@@ -1,14 +1,20 @@
 
 -- ----------------------------
--- Triggers structure for table PM_RcvLine
--- 材料出库触发器
+-- Triggers structure for table InvDoc_MiscShip
+-- 杂发触发器
+-- -- 杂收
+ -- 杂发-- 机加工的出入库
+-- status = 2 
+-- select top 10 t.status,t.* from   InvDoc_MiscShip t  where t.docno ='ZF19070235';
+-- select top 10 t.StoreBaseUOM ,t.iteminfo_itemid ,t.ItemInfo_ItemCode ,t.ItemInfo_ItemName,t.AAIStatus,t.*  from   InvDoc_MiscShipL t where t.miscship ='1001907090080106';
+
 -- ----------------------------
-if(OBJECT_ID('tri_Issue_MaterialDeliveryDoc') is not null)   
-  drop trigger tri_Issue_MaterialDeliveryDoc
+if(OBJECT_ID('tri_InvDoc_MiscShip') is not null)   
+  drop trigger tri_InvDoc_MiscShip
   go
  
-CREATE TRIGGER [tri_Issue_MaterialDeliveryDoc]
-ON [Issue_MaterialDeliveryDoc] 
+CREATE TRIGGER [tri_InvDoc_MiscShip]
+ON [InvDoc_MiscShip] 
 FOR UPDATE
 AS 
 -- 物料ID
@@ -85,6 +91,8 @@ declare @status                  bigint
 
 declare @DOCSTATE              bigint
 
+ 
+
 declare @OLD_STATUS              bigint
 
 declare @shipId                bigint
@@ -95,28 +103,28 @@ declare @custId                 bigint
 declare @custName               varchar(100) 
 -- 客户编码
 declare @custCode               varchar(100) 
--- 出库单据号
+-- 入库单据号
 declare @DocNo               varchar(100) 
--- 出库状态表主键
-declare @MaterialDeliveryDocId bigInt
-
+-- 杂收状态表主键
+declare @MisShipId bigInt
+ 
  
 begin 
-   if(UPDATE(DocState) )
+   if(UPDATE(status) )
  
-			select @DOCSTATE = DocState from inserted 
+			select @status = status from inserted 
 			-- 
-			if (@DOCSTATE = 2) 
+			if (@status = 2) 
 			begin 
 				-- 开始获取数据插入到 临时表
-				select @DocNo = DocNo,@MaterialDeliveryDocId = id,@whManName =ApproveBy  from inserted
-				
+				select @DocNo = docno,@MisShipId = id,@whManName =approvedby  from inserted
+	 
 				-- 料品数量
-				select @itemId = iteminfo ,@itemNum = issueQty, @itemUnitId = IssueBaseUOM from Issue_MaterialDeliveryDocLine t where t.MaterialDeliveryDoc = @MaterialDeliveryDocId
+				select @itemId = ItemInfo_ItemID ,@itemUnitCode = ItemInfo_ItemCode,@itemNum = storeUomQty,@itemName =iteminfo_itemname,@itemUnitId = StoreUOM from InvDoc_MiscRcvTransL t where t.MiscRcvTrans = @MisShipId
 				-- 料品编码
-				select @itemCode = code from CBO_ItemMaster t where t.id =  @itemId
+			-- --	select @itemCode = code from InvDoc_MiscRcvTransL t where t.id =  @itemId
 					-- 料号名称
-			  select @itemName= namecombinename from   CBO_ItemMaster_Trl   where ID = @itemId
+			 -- select @itemName= namecombinename from   CBO_ItemMaster_Trl   where ID = @itemId
 				-- 销售部门
 				-- select @saleDeptId = SaleDept,@custId = OrderBy_Customer from SM_Ship t where t.id = @shipId
 				-- select @saleDeptId = id,@saledeptName = name  from CBO_Department_trl where id = @saleDeptId
@@ -126,8 +134,8 @@ begin
 			select @itemUnitCode = code,@itemUnitName = shortName from Base_UOM t  where id = @itemUnitId
  
 			-- 收货客户	
-		--	select @custName = name from CBO_Customer_Trl t where t.id = @custId 
-		--	select @custCode = code  from CBO_Department t where t.id = @custId 
+		  -- select @custName = name from CBO_Customer_Trl t where t.id = @custId 
+		  -- select @custCode = code  from CBO_Department t where t.id = @custId 
 			
 			-- 仓库管理员
 			-- select @whManName = trl.name ,@whManCode = t.code  from CBO_Operators t ,CBO_Operators_Trl trl where t.id = trl.id and t.id = @whManId
@@ -137,8 +145,8 @@ begin
 			-- select @parentItemCode  = cit.code ,@parentItemName  = t.namecombinename from CBO_ItemMaster_Trl t,CBO_ItemMaster cit  where t.id = cit.id and t.id = @parentItemId  
 			
  
-begin 				
-				INSERT INTO wms_material_out (
+    begin 				
+				 INSERT INTO wms_Misc_out (
 																				  doc_no,
 																					item_id,
 																					item_code,

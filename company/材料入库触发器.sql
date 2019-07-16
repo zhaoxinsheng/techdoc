@@ -1,14 +1,14 @@
 
 -- ----------------------------
--- Triggers structure for table PM_RcvLine
--- 材料出库触发器
+-- Triggers structure for table Issue_MaterialConfirmDoc
+-- 材料入库触发器
 -- ----------------------------
-if(OBJECT_ID('tri_Issue_MaterialDeliveryDoc') is not null)   
-  drop trigger tri_Issue_MaterialDeliveryDoc
+if(OBJECT_ID('tri_Issue_MaterialConfirmDoc') is not null)   
+  drop trigger tri_Issue_MaterialConfirmDoc
   go
  
-CREATE TRIGGER [tri_Issue_MaterialDeliveryDoc]
-ON [Issue_MaterialDeliveryDoc] 
+CREATE TRIGGER [tri_Issue_MaterialConfirmDoc]
+ON [Issue_MaterialConfirmDoc] 
 FOR UPDATE
 AS 
 -- 物料ID
@@ -95,10 +95,10 @@ declare @custId                 bigint
 declare @custName               varchar(100) 
 -- 客户编码
 declare @custCode               varchar(100) 
--- 出库单据号
+-- 入库单据号
 declare @DocNo               varchar(100) 
--- 出库状态表主键
-declare @MaterialDeliveryDocId bigInt
+-- 入库状态表主键
+declare @MaterialConfirmDocId bigInt
 
  
 begin 
@@ -109,10 +109,10 @@ begin
 			if (@DOCSTATE = 2) 
 			begin 
 				-- 开始获取数据插入到 临时表
-				select @DocNo = DocNo,@MaterialDeliveryDocId = id,@whManName =ApproveBy  from inserted
+				select @DocNo = SourcDoc_SrcDocNo,@MaterialConfirmDocId = id,@whManName =ApproveBy  from inserted
 				
 				-- 料品数量
-				select @itemId = iteminfo ,@itemNum = issueQty, @itemUnitId = IssueBaseUOM from Issue_MaterialDeliveryDocLine t where t.MaterialDeliveryDoc = @MaterialDeliveryDocId
+				select @itemId = iteminfo ,@itemNum = ConfirmQtyUOM, @itemUnitId = IssueBaseUOM from Issue_MaterialConfirmDocLine t where t.MaterialConfirmDoc = @MaterialConfirmDocId
 				-- 料品编码
 				select @itemCode = code from CBO_ItemMaster t where t.id =  @itemId
 					-- 料号名称
@@ -126,8 +126,8 @@ begin
 			select @itemUnitCode = code,@itemUnitName = shortName from Base_UOM t  where id = @itemUnitId
  
 			-- 收货客户	
-		--	select @custName = name from CBO_Customer_Trl t where t.id = @custId 
-		--	select @custCode = code  from CBO_Department t where t.id = @custId 
+		  -- select @custName = name from CBO_Customer_Trl t where t.id = @custId 
+		  -- select @custCode = code  from CBO_Department t where t.id = @custId 
 			
 			-- 仓库管理员
 			-- select @whManName = trl.name ,@whManCode = t.code  from CBO_Operators t ,CBO_Operators_Trl trl where t.id = trl.id and t.id = @whManId
@@ -137,9 +137,8 @@ begin
 			-- select @parentItemCode  = cit.code ,@parentItemName  = t.namecombinename from CBO_ItemMaster_Trl t,CBO_ItemMaster cit  where t.id = cit.id and t.id = @parentItemId  
 			
  
-begin 				
-				INSERT INTO wms_material_out (
-																				  doc_no,
+    begin 				
+				 INSERT INTO wms_material_in (    doc_no,
 																					item_id,
 																					item_code,
 																					item_name, 
