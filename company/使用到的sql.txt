@@ -1,0 +1,123 @@
+-- 材料出库
+------------------
+Issue_MaterialDeliveryDoc Issue_MaterialDeliveryDocLine
+
+-- 材料入库
+
+
+select top 10 *  from PM_RcvLineLocation ;
+
+
+ -- 材料入库 
+select top 10 * from  Issue_MaterialConfirmDoc;					
+select top 10 * from Issue_MaterialConfirmDoc;
+
+-- 材料出库
+select top 10 * from Issue_MaterialConfirmDocLine;
+select top 10 * from Issue_MaterialConfirmDoc;
+
+-----------------------------------------------------------------------------------------------
+ -- 标准入库 -- 外协采购的入库
+select top 10 * from PM_RcvLine;
+select top 10 * from  PM_Receivement ;
+ -- 标准出库 
+select top 10 * from   SM_ShipLine;
+ 
+ -- 生产备料单
+ select top 10 t.DocLineNO,t.*  from MO_MOPickList  t order by t.createdon desc ;
+ -- 1001805300331615 1001805250236829
+ select top 10 t.*  from MO_MOPickList_trl  t  order by t.createdon desc ;
+ 
+ -- 材料入库 -- 没有使用完成的材料入库
+select top 10 * from  Issue_MaterialConfirmDoc;					
+select top 10 t.*  from Issue_MaterialConfirmDocLine t where t.DocNo ='CRKD-18060002';
+
+-- 材料出库
+select top 10 t.id ,t.iteminfo ,t.MaterialDeliveryDoc,t.issueQty,t.IssueBaseUOM,t.* from Issue_MaterialDeliveryDocLine t where t.MaterialDeliveryDoc ='1001907105356584';
+select top 10 t.DocNo,t.DocState,t.id ,t.*    from Issue_MaterialDeliveryDoc  t where t.DocNo ='CRKD-18060002'; -- 1001905080018535 -- CRKD-19071892
+select top 10 t.DocNo,t.DocState,t.id ,t.*    from Issue_MaterialDeliveryDoc  t where t.DocNo ='CRKD-18060002'; 
+
+select  t.DocNo,t.DocState,t.ApproveBy ,t.id ,t.*    from Issue_MaterialDeliveryDoc  t where t.DocNo ='CRKD-18060002'; 
+
+-- 王玉枫
+-- 2 表示审核通过
+select top 10 t.DocNo,t.DocState,t.id ,t.*    from Issue_MaterialDeliveryDoc  t where t.DocState ='2';
+
+select top 10 * from CBO_ItemMaster_Trl t where t.id ='1001905172328874';
+select top 10 t.code,t.* from CBO_ItemMaster t where t.id ='1001905172328874';
+
+	select t.shortName ,t.code  from Base_UOM t  where t.id ='1001805200000192';
+-- 1001905172328876
+
+1001804193954087 
+
+
+-- 杂收
+select top 10  t.id ,t.docno,t.status,t.approvedby,t.* from   InvDoc_MiscRcvTrans t where t.docno = 'ZS19070144';
+-- status = 2 审核通过
+select top 10 iteminfo_itemid ,t.iteminfo_itemcode,iteminfo_itemname, whman,t.* from  InvDoc_MiscRcvTransL t where t.InvDoc_MiscRcvTrans ='1001907105367362';
+
+select top 10  t.docno,t.status,t.* from   InvDoc_MiscRcvTrans t where t.status = 2;
+
+-- 杂发-- 机加工的出入库
+-- status = 2 
+select top 10 t.status,t.* from   InvDoc_MiscShip t  where t.docno ='ZF19070235';
+select top 10 t.StoreBaseUOM ,t.iteminfo_itemid ,storeUomQty,t.ItemInfo_ItemCode ,t.ItemInfo_ItemName,t.AAIStatus,t.*  from   InvDoc_MiscShipL t where t.miscship ='1001907090080106';
+
+-----------------------------------------------------------------------------------------------------------------
+-- 半成品入库  完工报告 -- 
+select top 10  t.CompleteRpt,t.* from  MO_CompleteRptRcvLine t where CompleteRpt ='1001907105372569' order by t.CreatedOn desc ;
+
+-- 1001907105372541
+select top 10  t.docno, t.CompleteQty,t.OperationState,t.* from  MO_CompleteRpt t where t.docno ='WG190710186';
+
+-- 1001907105372569
+-- bom 1001805200000192
+-- 3
+ select top 10  t.docno, DocState,WFCurrentState,t.StoreBaseUOM,t.CompleteQty,t.OperationState,t.* from  MO_CompleteRpt t where t.docno ='WG190710193';
+ select top 10  t.id ,t.mo,t.docno,t.ApproveBy, t.Item,DocState,WFCurrentState,t.StoreBaseUOM,t.CompleteQty,t.OperationState,t.* from  MO_CompleteRpt t where t.docno ='WG1806022';
+ 
+ -- 4 待审核
+ -- 1 已核准
+ -- 3 关闭
+ 
+  select top 10 *  from  MO_CompleteRpt t where  DocState = 3;
+ -- 
+
+select top 10  t.CompleteRpt,t.* from  MO_CompleteRptRcvLine t where CompleteRpt ='1001907102795453' order by t.CreatedOn desc ;
+
+select top 10 t.itemmaster,t.itemversion ,t.* from mo_mo t where id ='1001906080700712';
+
+select top 10  t.id ,t.code, t.Name ,t.* from CBO_ItemMaster t where id ='1001805300014146';
+
+select top 10  t.id ,t.code, t.Name ,t.* from CBO_ItemMaster t where id ='1001805300014221';
+
+select *   from CBO_BOMMaster t where t.ItemMaster ='1001805300014146';
+
+select top 10 * from CBO_ItemMaster_Trl t where t.id ='1001805300014221';
+
+select top 10 *  from CBO_ItemMaster_Trl t where id ='1001805300014146';
+select *  from Base_UOM t  where id ='1001905290011625';
+
+select top 10  *  from MO_CompleteRpt   t where t.DocState ='3';
+
+update  MO_CompleteRpt  set DocState ='1' where id ='1001806068660138';
+
+select * from wms_complete_in;
+
+
+select top 10 * from CBO_ItemMaster  t;
+
+ select *   from CBO_BOMMaster t where t.ItemMaster = '1001905100010261';
+ select *   from CBO_BOMMaster t where t.id  = '1001905100010261';
+select *  from Base_UOM t  where id ='1001905100010261';
+select top 10 *   from Base_UOM t where t.ID = 1001805200000192;
+-- C模组
+select top 10 * from CBO_ItemMaster_Trl t where t.NameCombineName like '%C模组%';
+ 
+
+select * from wms_material_in;
+
+
+------------------------------------------------------------------------------------------------------
+

@@ -1,21 +1,3 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : 192.168.188.19-erp-测试环境
- Source Server Type    : SQL Server
- Source Server Version : 11003156
- Source Host           : 192.168.188.19:1433
- Source Catalog        : COWAIN05
- Source Schema         : dbo
-
- Target Server Type    : SQL Server
- Target Server Version : 11003156
- File Encoding         : 65001
-
- Date: 02/07/2019 08:18:26
-*/
-
-
 -- ----------------------------
 -- Table structure for wms_storage_record
 -- ----------------------------
@@ -57,7 +39,8 @@ CREATE TABLE [dbo].[wms_storage_record] (
   [status] bigint  NULL,
   [recv_dept_code] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
   [wh_man_code] varchar(32) COLLATE Chinese_PRC_CI_AS  NULL,
-  [supplier_short_name] varchar(100) COLLATE Chinese_PRC_CI_AS  NULL
+  [supplier_short_name] varchar(100) COLLATE Chinese_PRC_CI_AS  NULL,
+  [doc_type] varchar(255) COLLATE Chinese_PRC_CI_AS  NULL
 )
 GO
 
@@ -300,6 +283,13 @@ EXEC sp_addextendedproperty
 'SCHEMA', N'dbo',
 'TABLE', N'wms_storage_record',
 'COLUMN', N'supplier_short_name'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'收货类型',
+'SCHEMA', N'dbo',
+'TABLE', N'wms_storage_record',
+'COLUMN', N'doc_type'
 GO
 
 
