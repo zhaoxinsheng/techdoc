@@ -120,7 +120,7 @@ begin
 				select @DocNo = docno,@MisShipId = id,@whManName =approvedby  from inserted
 	 
 				-- 料品数量
-				select @itemId = ItemInfo_ItemID ,@itemUnitCode = ItemInfo_ItemCode,@itemNum = storeUomQty,@itemName =iteminfo_itemname,@itemUnitId = StoreUOM from InvDoc_MiscRcvTransL t where t.MiscRcvTrans = @MisShipId
+				select @itemId = ItemInfo_ItemID ,@itemUnitCode = ItemInfo_ItemCode,@itemNum = storeUomQty,@itemName =iteminfo_itemname,@itemUnitId = StoreUOM from InvDoc_MiscShipL t where t.MiscShip = @MisShipId
 				-- 料品编码
 			-- --	select @itemCode = code from InvDoc_MiscRcvTransL t where t.id =  @itemId
 					-- 料号名称

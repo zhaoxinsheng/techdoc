@@ -7,6 +7,7 @@ GO
 
 CREATE TABLE [dbo].[wms_storage_record] (
   [id] bigint  IDENTITY(1,1) NOT NULL,
+  [doc_no] varchar(32) COLLATE Chinese_PRC_CI_AS  NULL,
   [item_id] bigint  NULL,
   [item_code] varchar(32) COLLATE Chinese_PRC_CI_AS  NULL,
   [item_name] varchar(100) COLLATE Chinese_PRC_CI_AS  NULL,
@@ -45,6 +46,13 @@ CREATE TABLE [dbo].[wms_storage_record] (
 GO
 
 ALTER TABLE [dbo].[wms_storage_record] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'单据号码',
+'SCHEMA', N'dbo',
+'TABLE', N'wms_storage_record',
+'COLUMN', N'doc_no'
 GO
 
 EXEC sp_addextendedproperty

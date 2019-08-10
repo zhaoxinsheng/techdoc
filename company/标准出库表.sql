@@ -25,6 +25,7 @@ GO
 
 CREATE TABLE [dbo].[wms_storge_out] (
   [id] bigint  NOT NULL,
+  [doc_no] varchar(255) COLLATE Chinese_PRC_CI_AS  NULL,
   [item_id] bigint  NULL,
   [item_code] varchar(255) COLLATE Chinese_PRC_CI_AS  NULL,
   [item_name] varchar(255) COLLATE Chinese_PRC_CI_AS  NULL,
@@ -61,6 +62,13 @@ CREATE TABLE [dbo].[wms_storge_out] (
 GO
 
 ALTER TABLE [dbo].[wms_storge_out] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'单据号',
+'SCHEMA', N'dbo',
+'TABLE', N'wms_storge_out',
+'COLUMN', N'doc_no'
 GO
 
 EXEC sp_addextendedproperty
