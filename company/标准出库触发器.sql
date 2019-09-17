@@ -1,14 +1,13 @@
 
 -- ----------------------------
 -- Triggers structure for table PM_RcvLine
--- 材料出库触发器
 -- ----------------------------
-if(OBJECT_ID('tri_Issue_MaterialDeliveryDoc') is not null)   
-  drop trigger tri_Issue_MaterialDeliveryDoc
+if(OBJECT_ID('tri_SM_ShipLine') is not null)   
+  drop trigger tri_SM_ShipLine
   go
  
-CREATE TRIGGER [tri_Issue_MaterialDeliveryDoc]
-ON [Issue_MaterialDeliveryDoc] 
+CREATE TRIGGER [tri_SM_ShipLine]
+ON [SM_ShipLine] 
 FOR UPDATE
 AS 
 -- 物料ID
@@ -83,7 +82,7 @@ declare @parenItemName3          varchar(100)
 -- 状态 1 正常 2 不正常
 declare @status                  bigint 
 
-declare @DOCSTATE              bigint
+declare @NEW_STATUS              bigint
 
 declare @OLD_STATUS              bigint
 
@@ -95,57 +94,58 @@ declare @custId                 bigint
 declare @custName               varchar(100) 
 -- 客户编码
 declare @custCode               varchar(100) 
--- 出库单据号
-declare @DocNo               varchar(100) 
--- 出库状态表主键
-declare @MaterialDeliveryDocId bigInt
 
  
 begin 
-   if(UPDATE(DocState) )
+   if(UPDATE(status) )
  
-			select @DOCSTATE = DocState from inserted 
-			-- 
-			if (@DOCSTATE = 2) 
+			select @NEW_STATUS = status from inserted 
+			
+			if (@NEW_STATUS = 3) 
 			begin 
 				-- 开始获取数据插入到 临时表
-				select @DocNo = DocNo,@MaterialDeliveryDocId = id,@whManName =ApproveBy  from inserted
-				
-				-- 料品数量
-				select @itemId = iteminfo ,@itemNum = issueQty, @itemUnitId = IssueBaseUOM from Issue_MaterialDeliveryDocLine t where t.MaterialDeliveryDoc = @MaterialDeliveryDocId
-				-- 料品编码
-				select @itemCode = code from CBO_ItemMaster t where t.id =  @itemId
+				select @itemNum = ShipQtyInvAmount,@itemUnitId=InvUom,@shipId = Ship, @whManId= WhMan from inserted
+				select @itemId = ItemInfo_ItemID from inserted
+				select @itemCode = ItemInfo_ItemCode from inserted 
 					-- 料号名称
 			  select @itemName= namecombinename from   CBO_ItemMaster_Trl   where ID = @itemId
 				-- 销售部门
-				-- select @saleDeptId = SaleDept,@custId = OrderBy_Customer from SM_Ship t where t.id = @shipId
-				-- select @saleDeptId = id,@saledeptName = name  from CBO_Department_trl where id = @saleDeptId
-				-- select @saledeptCode = code from CBO_Department where id = @saleDeptId				
+				select @saleDeptId = SaleDept,@custId = OrderBy_Customer from SM_Ship t where t.id = @shipId
+				select @saleDeptId = id,@saledeptName = name  from CBO_Department_trl where id = @saleDeptId
+				select @saledeptCode = code from CBO_Department where id = @saleDeptId				
 	 
 				-- 计价单位 编码
 			select @itemUnitCode = code,@itemUnitName = shortName from Base_UOM t  where id = @itemUnitId
  
 			-- 收货客户	
-		--	select @custName = name from CBO_Customer_Trl t where t.id = @custId 
-		--	select @custCode = code  from CBO_Department t where t.id = @custId 
+			select @custName = name from CBO_Customer_Trl t where t.id = @custId 
+			select @custCode = code  from CBO_Department t where t.id = @custId 
 			
 			-- 仓库管理员
-			-- select @whManName = trl.name ,@whManCode = t.code  from CBO_Operators t ,CBO_Operators_Trl trl where t.id = trl.id and t.id = @whManId
+			 select @whManName = trl.name ,@whManCode = t.code  from CBO_Operators t ,CBO_Operators_Trl trl where t.id = trl.id and t.id = @whManId
 			
 			-- 母阶
-			-- select @parentItemId = t.id  from CBO_BOMMaster t where t.ItemMaster = @itemId;
-			-- select @parentItemCode  = cit.code ,@parentItemName  = t.namecombinename from CBO_ItemMaster_Trl t,CBO_ItemMaster cit  where t.id = cit.id and t.id = @parentItemId  
+			select @parentItemId = t.id  from CBO_BOMMaster t where t.ItemMaster = @itemId;
+			select @parentItemCode  = cit.code ,@parentItemName  = t.namecombinename from CBO_ItemMaster_Trl t,CBO_ItemMaster cit  where t.id = cit.id and t.id = @parentItemId  
 			
  
 begin 				
-				INSERT INTO wms_material_out (
-																				  doc_no,
+				INSERT INTO wms_storge_out (
 																					item_id,
 																					item_code,
-																					item_name, 
+																					item_name,
+																					sale_dept_id,
+																					sale_dept_name, 
+																					sale_dept_code, 
+																					parent_item_id,
+																					parent_item_code,
+																					parent_item_name ,
 																					item_num,
 																					item_unit_id,
-																					item_unit_code, 
+																					item_unit_code,
+																					cust_id,
+																					cust_name,
+																					cust_code,
 																					wh_man_id,
 																					wh_man_name,
 																					wh_man_code,
@@ -155,18 +155,32 @@ begin
 																					position_code,
 																					insert_time,
 																					update_time,
-																					data_source ,
-																					status
-																					)
+																					data_source,
+																					parent_item_id2,
+																					parent_item_code2,
+																					parent_item_name2,
+																					parent_item_id3,
+																					parent_item_code3,
+																					parent_item_name3,
+																					status 
+)
 																VALUES
 																	( 
-																	  @DocNo,
 																		@itemId ,
 																		 @itemCode,
-																		 @itemName , 
+																		 @itemName ,
+																		 @saleDeptId  ,
+																		 @saledeptName ,
+																		 @saledeptCode ,
+																		 @parentItemId,
+																		 @parentItemCode,
+																		 @parentItemName ,
 																		 @itemNum ,
 																		 @itemUnitId ,
-																		 @itemUnitCode  , 
+																		 @itemUnitCode  ,
+																		 @custId   ,
+																		 @custName ,
+																		 @custCode,
 																		 @whManId  ,
 																		 @whManName  ,
 																		 @whManCode,
@@ -176,8 +190,14 @@ begin
 																		 @positionCode  ,
 																		 CONVERT(varchar,GETDATE(),120),
 																		 CONVERT(varchar,GETDATE(),120),
-																		 1 ,
-																		 1
+																		 1,
+																		 @parentItemId2,
+																		 @parentItemCode2,
+																		 @parentItemName2,
+																		 @parentItemId3  ,
+																		 @parentItemCode3 ,
+																		 @parenItemName3 ,
+																		 @status
 																	)
 			 
 		 end

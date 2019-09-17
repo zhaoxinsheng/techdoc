@@ -1,0 +1,7 @@
+select tr.name as [触发器],ta.name as [表名],tr.is_disabled as [是否禁用], tr.is_instead_of_trigger AS [触发器类型],
+case when tr.is_instead_of_trigger = 1 then 'INSTEAD OF' when tr.is_instead_of_trigger = 0 then 'AFTER' else null end as [触发器类型描述]
+from sys.triggers tr
+inner join sys.tables ta on tr.parent_id = ta.object_id
+where tr.type ='TR'
+--and is_disabled=1
+order by tr.create_date
